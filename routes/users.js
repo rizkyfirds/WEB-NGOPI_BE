@@ -52,7 +52,7 @@ router.post('/login', async (req, res) => {
 router.get('/forgotpassword', async (req, res) => {
     const {nama, email} = req.body
     connection.query(`SELECT * FROM user WHERE nama="${nama}" AND email="${email}" `, function (err, rows) {
-        //console.log(email,rows.data[0])
+        console.log(nama,email,rows)
         if (err) {
             return res.status(500).json({
                 status: false,
