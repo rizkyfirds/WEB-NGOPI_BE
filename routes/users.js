@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     const { email, pass } = req.body
-    try{
+    try {
         connection.query(`SELECT * FROM user WHERE email="${email}" AND pass = ${pass}`, (err, data) => {
             //console.log(data)
             res.status(200).json({
@@ -42,29 +42,29 @@ router.post('/login', async (req, res) => {
                 metadata: "Login Success"
             })
         })
-    }catch{
+    } catch {
         res.status(400).json({
             error: "data invalid"
         })
     }
 })
 
-router.get('/forgotpassword', async (req, res) => {
-    const {nama, email} = req.body
+router.post('/forgotpassword', async (req, res) => {
+    const { nama, email } = req.body
     connection.query(`SELECT * FROM user WHERE nama="${nama}" AND email="${email}" `, function (err, rows) {
-        console.log(nama,email,rows)
+        console.log(nama, email, rows)
         if (err) {
             return res.status(500).json({
                 status: false,
                 message: "server error",
             })
         } else {
-            if(rows != null){
+            if (rows != null) {
                 return res.status(200).json({
                     status: true,
                     rows //postmand dapet tapi fe undefined
                 })
-            }else{
+            } else {
                 return res.status(200).json({
                     status: false,
                     message: "data invalid"
@@ -76,30 +76,22 @@ router.get('/forgotpassword', async (req, res) => {
 
 
 router.put('/changepassword', async (req, res) => {
-        const { pass, newpass,id } = req.body //ngambil data dari fe
-        connection.query(`SELECT * FROM user WHERE user_ID="${id}" `, function (err, rows) {
-            if (err) {
-                return res.status(500).json({
-                    message: "server error",
-                })
-            } else {
-                connection.query(`UPDATE user SET pass = "${newpass}" WHERE user_ID="${id}" AND pass ="${pass}"`, function (err, rows) {
-                    if (err) {
-                        return res.status(500).json({
-                            status: false,
-                            message: "server error"
-                        })
-                    } else {
-                        return res.status(200).json({
-                            status: true,
-                            message: "user updated"
-                        })
-                    }
-                
-                })
-            }
-        
-        })
+    const { newpass, id } = req.body //ngambil data dari fe
+    connection.query(`UPDATE user SET pass = "${newpass}" WHERE user_ID="${id}"`, function (err, rows) {
+        if (err) {
+            return res.status(500).json({
+                status: false,
+                message: "server error"
+            })
+        } else {
+            return res.status(200).json({
+                status: true,
+                message: "user updated"
+            })
+        }
+
     })
+
+})
 
 module.exports = router
