@@ -60,7 +60,25 @@ router.get('/snack', async (req, res) => {
         } else {
             return res.status(200).json({
                 message: "Get Product Success",
-                dataProd: rows
+                rows
+            })
+        }
+    })
+})
+
+router.get('/detailprod/:id', async (req, res) => {
+    const {id} = req.params
+    //console.log(id)
+    connection.query(`SELECT * FROM product WHERE product_id = "${parseInt(id)}"`, function (err, rows) {
+        if (err) {
+            return res.status(500).json({
+                status: false,
+                message: "Internal Server Error",
+            })
+        } else {
+            return res.status(200).json({
+                message: "Get Product Success",
+                rows
             })
         }
     })
